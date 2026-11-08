@@ -1,6 +1,6 @@
 # Project Roadmap & Task Tracking: code-as-assets
 
-> **Strategic Governance**: All development follows `.agents/skills/strategic/SKILL.md` and executes exclusively via `vp` (Vite+). Plain `npm` or `npx` commands are strictly forbidden.
+> **Strategic Governance**: All development follows [`.agents/skills/strategic/SKILL.md`](file:///.agents/skills/strategic/SKILL.md) and executes exclusively via `vp` (Vite+). Plain `npm` or `npx` commands are strictly forbidden.
 
 ---
 
@@ -20,56 +20,61 @@
 
 ---
 
-## 🚀 Phase 1: Sound Effect Synthesizer POC (Current Sprint)
+## 🚀 Phase 1: Sound Effect Synthesizer POC (Complete)
 
 ### Milestone 1.1: Audio Synthesis Core (`src/audio/`)
 
-- [ ] Implement `AudioEngine` singleton managing `AudioContext` and safety limiter node (`DynamicsCompressorNode`).
-- [ ] Implement parametric sound patch data model (`SoundPatch`):
-  - Oscillator types: Sine, Triangle, Sawtooth, Square, Pulse/PWM, Noise (White, Pink).
-  - Frequency & Pitch Sweep: `startFreq`, `endFreq`, `sweepCurve` (exponential/linear), `pitchModulation` (vibrato rate & depth).
-  - Envelopes: ADSR (Attack, Decay, Sustain level, Release time) for Amplitude and Filter Cutoff.
-  - Filter: BiquadFilter (Lowpass, Highpass, Bandpass) with Cutoff & Resonance (Q).
-  - FX: Overdrive/Distortion curve, bitcrusher.
-- [ ] Offline rendering pipeline via `OfflineAudioContext` for rendering high-precision `AudioBuffer` at custom sample rates (22050, 44100, 48000 Hz).
+- [x] Implement `AudioEngine` singleton managing Web Audio `AudioContext` and safety limiter node (`DynamicsCompressorNode`).
+- [x] Implement parametric sound patch data model (`SoundParams`) with beginner-friendly descriptions and game dev tips.
+- [x] Multi-waveform oscillator support: Sine, Triangle, Sawtooth, Square, and filtered White/Pink Noise.
+- [x] Frequency & pitch sweeps with customizable semitones and curve speeds.
+- [x] LFO Vibrato / Wobble modulation (rate & depth).
+- [x] 4-stage ADSR volume envelope (Attack, Decay, Sustain, Release).
+- [x] Biquad filter (Low-pass, High-pass, Band-pass) with resonance (Q) and cutoff controls.
+- [x] Retro grit & distortion waveshaper with oversampling.
+- [x] Offline rendering pipeline via `OfflineAudioContext` for rendering high-precision `AudioBuffer` for instant export.
 
 ### Milestone 1.2: Game Asset Export Engine (`src/export/`)
 
-- [ ] **WAV PCM Exporter**:
-  - Uncompressed 16-bit / 24-bit integer PCM WAV encoder.
+- [x] **WAV PCM Exporter** (`src/export/wavEncoder.ts`):
+  - Standard uncompressed 16-bit integer PCM WAV encoder.
   - Zero-latency game engine asset generation (Unity, Godot, Unreal, Web).
-- [ ] **OGG Vorbis Exporter**:
-  - Vorbis encoder integration (via WebAssembly or Web Worker) for compressed loopable game audio.
-  - Support loop point metadata tags if needed.
-- [ ] **Data Export Utilities**:
+- [x] **OGG Vorbis Exporter** (`src/export/oggEncoder.ts`):
+  - In-browser MediaRecorder compressed audio stream exporter (.ogg / .webm).
+- [x] **Data Export Utilities** (`src/export/codeExport.ts`):
   - Export as Base64 Data URI (instant game/web prototyping).
-  - Export as standalone code snippet (Web Audio API synthesis script to run without asset files).
+  - Export as standalone code snippet (pure Web Audio API script to run without asset files).
 
 ### Milestone 1.3: Studio User Interface (`src/components/`)
 
-- [ ] **Modular Rack Layout** (aligned with `my-design` and `ui-design`):
-  - Header: Patch name, preset category, master volume meter, audio engine toggle.
-  - Real-time Visualizer: Canvas-based Oscilloscope (waveform) and frequency spectrum analyzer.
-  - Interactive ADSR Canvas: Draggable curve handles for attack, decay, sustain, release.
-  - Rotary Knobs & Sliders: Vertical-drag knobs with `Shift` for fine-tuning and double-click to reset.
-  - Quick Audition Bar: Spacebar trigger, mini chromatic audition keyboard (test pitch scaling).
-  - Export Station: Format selector (OGG / WAV), sample rate selector, "Download SFX" button.
+- [x] **Tactile Studio Workstation Layout** (aligned with `my-design` and `ui-design`):
+  - Header: Studio title, master volume safety limiter, Spacebar audition trigger, quick export launcher.
+  - Real-time Visualizer: Canvas-based Oscilloscope with live waveform drawing and phosphor glow.
+  - Pitch Audition Strip: 7 interactive pitch pads to test the effect at different musical pitches (-12st to +12st).
+  - Beginner-Friendly Parameter Controls: Plain-English names, technical subtitles, and hover tooltips.
+  - Mode Switcher: "Simple Controls" for accessible editing vs "Advanced Rack" for full DSP parameter access.
+  - Export Modal: 1-click WAV / OGG download, Base64 copy, and runtime code snippet copy.
 
-### Milestone 1.4: Preset Library & Randomizer
+### Milestone 1.4: Preset Library & Randomizer (`src/audio/presets.ts`)
 
-- [ ] Built-in game sound archetypes:
-  - _Laser / Blaster_: High-to-low fast exponential frequency drop.
-  - _Explosion_: Filtered noise burst with heavy decay.
-  - _Jump / Bounce_: Low-to-high pitch sweep.
-  - _Coin / Pickup_: Two-tone arpeggio with high sine bell timbre.
-  - _Powerup_: Multi-step rising frequency sweep.
-  - _Hit / Hurt_: Harsh distorted square wave with rapid decay.
-- [ ] "Mutate" & "Randomize" generator with seed reproduction.
+- [x] Built-in game sound archetypes:
+  - _Laser Zap_: Fast exponential pitch drop.
+  - _Coin Pickup_: Bright two-tone chime.
+  - _8-Bit Jump_: Rising pitch sweep.
+  - _Heavy Explosion_: Filtered noise burst with deep rumble.
+  - _Power-up Rise_: Multi-step rising frequency sweep.
+  - _Impact / Hurt_: Sharp square wave with rapid decay and crunch.
+  - _Sci-Fi Wobble_: Resonant bandpass filter with LFO vibrato.
+  - _Crisp UI Click_: High-frequency micro-click.
+- [x] "Mutate" button to nudge current sound parameters slightly for easy variations.
+- [x] "Roll Random" generator for one-click sound creation.
 
 ---
 
-## 🔮 Future Phases
+## 🔮 Phase 2: Sound Design Expansion (Upcoming)
 
-- **Phase 2: Sound Design Expansion**: FM synthesis pairs, polyphonic layering, wavetable synthesis, reverb impulse responses.
-- **Phase 3: Visual & Texture Asset Generator**: Procedural pixel art sprites, seamless tiling textures, normal maps.
-- **Phase 4: Game Engine Direct Integration**: Godot engine addon / Unity package export for live asset syncing.
+- [ ] Polyphonic layering (dual oscillator blending: sub-bass + noisy attack transient).
+- [ ] Wavetable synthesis for complex vocal / metallic game sound effects.
+- [ ] Pitch envelope curve editor (interactive graphical bezier editor).
+- [ ] Batch asset export (generate a set of 5-10 related SFX variations in a single ZIP).
+- [ ] Project save / load (local storage or JSON patch file).
